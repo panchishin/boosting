@@ -1,0 +1,26 @@
+{
+  "name": "boost",
+  "version": "0.0.1",
+  "description": "a generic boosting algorithm, useful for A.I. applications to improve performance of a crowd of algorithms",
+  "main": "boost.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panchishin/boost.git"
+  },
+  "keywords": [
+    "boost",
+    "a.i.",
+    "ai",
+    "machine",
+    "learning"
+  ],
+  "author": "Anton Panchishin",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/panchishin/boost/issues"
+  },
+  "homepage": "https://github.com/panchishin/boost#readme"
+}
