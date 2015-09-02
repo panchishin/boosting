@@ -1,31 +1,36 @@
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Auto Test Status][travis-image]][travis-url] [![license][license-image]][license-url] [![Gitter chat][gitter-image]][gitter-url]
 
-a generic boosting algorithm, useful for A.I. applications to improve performance of a crowd of algorithms
+The *Boosting* package is a general boosting algorithm which make a group of classifiers act as one improved classifier.
 
-Section Links : [Construction](#construction) , [Execution](#execution) , [Examples](#example) , [Related](#related-ai-projects) , and [References](#references)
+What is a classifier?  A classifier is something (a function in this case) that determines if a thing is *one* kind of thing or *another* kind.  For example, suppose you have a few different functions that can scan images and detect if a persons face is in the image.  Either there is a face or there isn't.  Those functions are classifiers.  Independently they may not do all that well.  Boosting organizes and scales them so that together your functions do a better job than any one of them by themselves.  If there is a classifier that isn't important, redundant, or that is confusing the issue *Boosting* can detect that and exclude it.
+
+Much like [Genetic Algorithm](https://www.npmjs.com/package/geneticalgorithm), [Nearest Neighbour](https://www.npmjs.com/package/nearestneighbour), and [Neural Nets](https://www.npmjs.com/package/neuralnet), Boosting requires a training set.  
+
+To use Boosting you'll need some classifiers (that you write yourself or created from Neural Nets and Nearest Neighbours) and some data.
+
+Section Links : [Construction](#construction) , [Execution](#execution) , [Example](#example) , [Related](#related-ai-projects) , and [References](#references)
 
 # Construction
 
 ### Boosting constructor
-Create a Boost like so:
+Boosting is created like so:
 ```js
 var BoostingConstructor = require('boosting')
 var boosting = BoostingConstructor( )
 ```
-Or simply in one line like so:
-```js
-var boosting = require('boosting')( )
-```
+
 Here is the full configuration object and the constructor.
 ```js
 var config = {
-	known 		: [],  // a list of known objects (see below)
-	classifiers : [],  // a list of classifier objects (see below)
+	known 		: [],  // a list of known objects
+	classifiers : [],  // a list of classifier objects
 }
 var BoostingConstructor = require('boosting')
 var boosting = BoostingConstructor( config )
 ```
-You really don't need to send in the config.  Instead you can use the add functions.  All configuration options are optional.  If you want to make two different calculates you'll want to create two instances of Boosting each with its own configuration.
+Quick links to more information about the [config](#configuration) , [known](#known-list) , and [classifiers](#classifier-list).
+
+You really don't need to use the config.  Instead you can use the add functions.  All configuration options are optional.
 
 ### boosting.config()
 > Returns config
@@ -61,18 +66,18 @@ boosting.addClassifier( myClassifier , "win function")
 
 # Execution
 
-### boosting.optimizer( )
+### boosting.optimize( )
 > Returns boosting
 
 Review ALL the known points of data against ALL the classifiers and organize them according to the *Boost* algorithm.  If you provided a LOT of known points and classifiers then be prepared for this to take a really really long time.  For a few hundred or thousand combinations it should be lightening fast.
 
-Call the boosting optimizer like so:
+Call boosting optimize like so:
 ```js
-boosting.optimizer( )
+boosting.optimize( )
 ```
 Wow, that was easy.  Okay, maybe you want to enforce an alphaThreshold.  If you do, then pass it as a parameter.  Don't know what an alphaThreshold is?  No problem.  Don't set it.
 ```js
-boosting.optimizer( alphaThreshold )
+boosting.optimize( alphaThreshold )
 ```
 Why would you enforce an alphaThreshold?  Well, maybe you don't want useless classifiers to be included in the optimization.  Of course that means you'll have to find out what alphaThreshold means.  Or not.
 
@@ -88,22 +93,21 @@ var result = boosting.classify( data )
 # Configuration
 This is the specification of the configuration arrays you pass to boosting
 
-### classifiers
-```js
-classifiers = [
-	{ exec : classifierFunction1 , name : "name1" },
-	{ exec : classifierFunction2 , name : "name2" },
-	...	
-]
-```
-
-### known
+### Known List
 ```js
 known = [
 	{ data : data1 , value : +1 },
 	{ data : data2 , value : -1 },
 	{ data : data3 , value : +1 },
 	....
+]
+```
+### Classifiers List
+```js
+classifiers = [
+	{ exec : classifierFunction1 , name : "name1" },
+	{ exec : classifierFunction2 , name : "name2" },
+	...	
 ]
 ```
 

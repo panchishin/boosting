@@ -1,6 +1,6 @@
 {
   "name": "boosting",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "a generic boosting algorithm, useful for A.I. applications to improve performance of a crowd of algorithms",
   "main": "boosting.js",
   "devDependencies": {
