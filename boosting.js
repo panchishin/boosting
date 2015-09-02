@@ -10,6 +10,14 @@ function defaultConfig() {
 	}
 }
 
+function truthTest( value ) {
+	return value && value != -1
+}
+
+function toBinary( value ) {
+	return truthTest(value) ? 1 : -1
+}
+
 function initializeWeight( known ) {
 	var weight = 1/known.length
 	known.forEach( function( known ) {
@@ -23,7 +31,7 @@ function testClassifiers( classifiers , known ) {
 	known.forEach( function( known ) {
 		var total = 0
 		classifiers.forEach( function( classifier ) {
-			total += classifier.alpha * classifier.exec(known.data)
+			total += classifier.alpha * toBinary( classifier.exec(known.data) )
 		})
 		if ( total > 0 ) {
 			correct.push(known)
@@ -61,7 +69,7 @@ function classifierAlpha( classifier , known ) {
 	var correct = []
 	var incorrect = []
 	known.forEach( function( known ) {
-		classifier.error += classifier.exec(known.data) == known.value ? 0 : known.weight
+		classifier.error += toBinary( classifier.exec(known.data) ) == known.value ? 0 : known.weight
 	})
 	classifier.alpha = errorToAlpha( classifier.error )
 	return classifier.alpha
