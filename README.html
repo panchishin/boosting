@@ -1019,52 +1019,44 @@ body .markdown-body
 <p>What is a classifier?  A classifier is something (a function in this case) that determines if a thing is <em>one</em> kind of thing or <em>another</em> kind.  For example, suppose you have a few different functions that can scan images and detect if a persons face is in the image.  Either there is a face or there isn&rsquo;t.  Those functions are classifiers.  Independently they may not do all that well.  Boosting organizes and scales them so that together your functions do a better job than any one of them by themselves.  If there is a classifier that isn&rsquo;t important, redundant, or that is confusing the issue <em>Boosting</em> can detect that and exclude it.</p>
 <p>Much like <a href="https://www.npmjs.com/package/geneticalgorithm">Genetic Algorithm</a>, <a href="https://www.npmjs.com/package/nearestneighbour">Nearest Neighbour</a>, and <a href="https://www.npmjs.com/package/neuralnet">Neural Nets</a>, Boosting requires a training set.  </p>
 <p>To use Boosting you&rsquo;ll need some classifiers (that you write yourself or created from Neural Nets, Nearest Neighbours, or etc) and some data (such as voter turn out or hockey stats).</p>
-<p>Section Links : <a href="#construction">Construction</a> , <a href="#execution">Execution</a> , <a href="#example">Example</a> , <a href="#faq">FAQ</a> , <a href="#related-ai-projects">Related</a> , and <a href="#references">References</a></p>
+<p>Section Links : <a href="#construction">Construction</a> , <a href="#execution">Execution</a> , <a href="#configuration">Configuration</a> , <a href="#example">Example</a> , <a href="#faq">FAQ</a> , <a href="#related-ai-projects">Related</a> , and <a href="#references">References</a></p>
 <h1 id="construction"><a name="user-content-construction" href="#construction" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Construction</h1>
-<h3 id="boosting-constructor"><a name="user-content-boosting-constructor" href="#boosting-constructor" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Boosting constructor</h3>
-<p>Boosting is created like so:<br />
+<h3 id="requireboosting"><a name="user-content-requireboosting" href="#requireboosting" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>require(&lsquo;boosting&rsquo;)</h3>
+<p>The Boosting Constructor is created like so:<br />
 <pre><code class="js">var BoostingConstructor = require('boosting')
-var boosting = BoostingConstructor( )
-</code></pre></p>
-<p>Here is the full configuration object and the constructor.<br />
-<pre><code class="js">var config = {
-    known       : [],  // a list of known objects
-    classifiers : [],  // a list of classifier objects
-}
-var BoostingConstructor = require('boosting')
+var config = { /* config options */ }
 var boosting = BoostingConstructor( config )
 </code></pre><br />
-Quick links to more information about the <a href="#configuration">config</a> , <a href="#known-list">known</a> , and <a href="#classifier-list">classifiers</a>.</p>
-<p>You really don&rsquo;t need to use the config.  Instead you can use the add functions.  All configuration options are optional.</p>
-<h3 id="boostingconfig"><a name="user-content-boostingconfig" href="#boostingconfig" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>boosting.config()</h3>
-<blockquote>
-<p>Returns config</p>
-</blockquote>
-<p>Want to retrieve or inspect the configurate?  No problem, do it like so:<br />
-<pre><code class="js">var theConfig = boosting.config()
-</code></pre></p>
-<h3 id="boostingadddata-data-binaryvalue"><a name="user-content-boostingadddata-data-binaryvalue" href="#boostingadddata-data-binaryvalue" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>boosting.addData( data , binaryValue)</h3>
-<blockquote>
-<p>Returns boosting</p>
-</blockquote>
-<p>Don&rsquo;t want to mess around with the <em>known</em> object list in the config?  No problem, add known data using the addData function.  The data is whatever your classifier functions take as an argument and the binaryValue <em>must be</em> either -1 or +1.<br />
-<pre><code class="js">boosting.addData( &quot;cupcake&quot; , -1 )
-</code></pre></p>
+Or as a one liner with default config:<br />
+<pre><code class="js">var boosting = require('boosting')( )
+</code></pre><br />
+That&rsquo;s it.  Of course there are more <a href="#configuration">configuration</a> options, but they are all optional.</p>
 <h3 id="boostingaddclassifier-classifierfunction-handyname"><a name="user-content-boostingaddclassifier-classifierfunction-handyname" href="#boostingaddclassifier-classifierfunction-handyname" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>boosting.addClassifier( classifierFunction , handyName )</h3>
 <blockquote>
 <p>Returns boosting</p>
 </blockquote>
-<p>Don&rsquo;t want to mess around with the <em>classifiers</em> list in the config?  No problem, add your classifier functions using the addClassifier function.  Sound familar?  The classifierFunction takes the <em>data</em> you supplied in <em>.addData</em> and <em>must</em> return either -1 or +1.  Not 0.  Not 7.3.  -1 or +1.  The handy name is optional.  Use it like so:</p>
-<pre><code class="js">var myClassifier = function(data) { 
-    /* do something and return -1 or +1 */
+<p>Add your classifier functions using the addClassifier function.  Your classifierFunction takes training and actual data you supply.  Your classifier returns a boolean.  You can also give it a handy name, but that is optional.  Use it like so:</p>
+<p><pre><code class="js">var myClassifier = function(data) { 
+    /* do something and return something truthy or falsy */
 }
 # add it
 boosting.addClassifier( myClassifier )
 
 # or add it with a nice name, useful for debugging
 boosting.addClassifier( myClassifier , &quot;win function&quot;)
-</code></pre>
-
+</code></pre><br />
+Why add a name?  No real reason other than debugging and self-documentation.</p>
+<h3 id="boostingadddata-data-boolean"><a name="user-content-boostingadddata-data-boolean" href="#boostingadddata-data-boolean" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>boosting.addData( data , boolean )</h3>
+<blockquote>
+<p>Returns boosting</p>
+</blockquote>
+<p>Add training data using the addData function.  The data is whatever your classifier functions take as an argument and the boolean value can be any javascript truthy or falsy value.<br />
+<pre><code class="js">boosting.addData( &quot;cupcake&quot; , false )
+</code></pre><br />
+Because it returns the boosting object you can chain the calls like so:<br />
+<pre><code class="js">boosting.addData( &quot;cupcake&quot; , false ).addData( &quot;bacon&quot; , true )
+</code></pre><br />
+You can do that with the addClassifier also, or mix it up and do one then the other.</p>
 <h1 id="execution"><a name="user-content-execution" href="#execution" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Execution</h1>
 <h3 id="boostingoptimize"><a name="user-content-boostingoptimize" href="#boostingoptimize" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>boosting.optimize( )</h3>
 <blockquote>
@@ -1077,21 +1069,40 @@ boosting.addClassifier( myClassifier , &quot;win function&quot;)
 Wow, that was easy.  Okay, maybe you want to enforce an alphaThreshold.  If you do, then pass it as a parameter.  Don&rsquo;t know what an alphaThreshold is?  No problem.  Don&rsquo;t set it.<br />
 <pre><code class="js">boosting.optimize( alphaThreshold )
 </code></pre><br />
-Why would you enforce an alphaThreshold?  Well, maybe you don&rsquo;t want useless classifiers to be included in the optimization.  Of course that means you&rsquo;ll have to find out what alphaThreshold means.  Or not.</p>
+Why would you enforce an alphaThreshold?  Well, maybe you don&rsquo;t want useless classifiers to be included in the optimization.  Of course that means you&rsquo;ll have to find out what alphaThreshold means.  Or not and try <em>0.1</em>.</p>
+<p>Optimize moves some, none, or all of the classifiers out of its unused classifiers bin and into the <em>Good Classifier</em> bin.  If you run <em>.optimize</em> again, Boosting with check the unused classifiers (and any recently added classifiers) and see if they should be moved over to the other bin.</p>
 <h3 id="boostingclassify-data"><a name="user-content-boostingclassify-data" href="#boostingclassify-data" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>boosting.classify( data )</h3>
 <blockquote>
-<p>Returns +1 or -1</p>
+<p>Returns boolean</p>
 </blockquote>
 <p>Test some data.  This is where it all comes together.  You&rsquo;ve configured your boosting function, added your data and classifiers, and optimized it.  Now you have some data that you want classified.  Do it like so:<br />
 <pre><code class="js">var result = boosting.classify( data )
 </code></pre></p>
 <h1 id="configuration"><a name="user-content-configuration" href="#configuration" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Configuration</h1>
+<h3 id="config-object"><a name="user-content-config-object" href="#config-object" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Config object</h3>
+<p>Here is the full configuration object and the constructor.<br />
+<pre><code class="js">var config = {
+    known       : [],  // a list of known objects
+    classifiers : [],  // a list of classifier objects
+}
+var BoostingConstructor = require('boosting')
+var boosting = BoostingConstructor( config )
+</code></pre><br />
+Quick links to more information about the <a href="#known-list">known</a> , and <a href="#classifier-list">classifiers</a>.</p>
+<p>You really don&rsquo;t need to use the config.  Instead you can use the add functions.  All configuration options are optional.</p>
+<h3 id="boostingconfig"><a name="user-content-boostingconfig" href="#boostingconfig" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>boosting.config()</h3>
+<blockquote>
+<p>Returns config</p>
+</blockquote>
+<p>Want to retrieve or inspect the configurate?  No problem, do it like so:<br />
+<pre><code class="js">var theConfig = boosting.config()
+</code></pre></p>
 <p>This is the specification of the configuration arrays you pass to boosting</p>
 <h3 id="known-list"><a name="user-content-known-list" href="#known-list" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Known List</h3>
 <pre><code class="js">known = [
-    { data : data1 , value : +1 },
-    { data : data2 , value : -1 },
-    { data : data3 , value : +1 },
+    { data : data1 , value : true },
+    { data : data2 , value : false },
+    { data : data3 , value : true },
     ....
 ]
 </code></pre>
@@ -1105,21 +1116,15 @@ Why would you enforce an alphaThreshold?  Well, maybe you don&rsquo;t want usele
 </code></pre>
 
 <h1 id="example"><a name="user-content-example" href="#example" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Example</h1>
-<pre><code class="js">var boosting = require('./boosting')()
-boosting.addClassifier( function(x) { return x &lt; 5 ? +1 : -1 } , &quot;less than 5&quot;)
-boosting.addClassifier( function(x) { return x % 2 ? +1 : -1 } , &quot;odd&quot;)
-boosting.addData( 0 , +1 )
-boosting.addData( 2 , +1 )
-
-boosting.optimize(0)
-console.log( &quot;classify(1) Should return '1' : &quot; + boosting.classify( 1 ) )
-console.log( &quot;classify(6) Should return '-1' : &quot; + boosting.classify( 6 ) )
-
-var config = boosting.config()
-console.log( &quot;Should use the classifier named 'less than 5' : &quot; + (config.goodClassifiers[0].name == &quot;less than 5&quot;) )
-console.log( &quot;Should only use the classifier named 'less than 5' : &quot; + (config.goodClassifiers.length == 1) )
-</code></pre>
-
+<p>If you have installed this as a npm dependency first change directory to <em>node_modules/boosting/</em>.</p>
+<h3 id="template"><a name="user-content-template" href="#template" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Template</h3>
+<p>This is a simple boilerplate ready for you to add your code.  Run it like so:<br />
+<pre><code>node example/template.js
+</code></pre></p>
+<h3 id="minimal"><a name="user-content-minimal" href="#minimal" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Minimal</h3>
+<p>An absolute minimalist example of some classification.  Run it like so:<br />
+<pre><code>node example/minimalist.js
+</code></pre></p>
 <h1 id="faq"><a name="user-content-faq" href="#faq" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>FAQ</h1>
 <p><em>Can I use Boosting on Boosting?</em>  Yes you can!  Will it do anything extra?  Maybe.  If you have a few classifiers and a boosting of some other classifiers then you could use boosting again to combine the whole lot.  Enjoy.</p>
 <p><em>What about over-fitting?</em>  Yes, over fitting is a problem with Neural Nets, Genetic Algorithms, and the like.  Boosting seems to not suffer from that problem.  Can you take a neural net that has been trained to overfit a problem and wrap it in Boosting to magically fix it?  No.  But if you had a few more neural nets and possibly a nearest neighbour and binomial classification all wrapped in boosting then, yes, over-fitting will be less of a problem.</p>

@@ -8,54 +8,32 @@ Much like [Genetic Algorithm](https://www.npmjs.com/package/geneticalgorithm), [
 
 To use Boosting you'll need some classifiers (that you write yourself or created from Neural Nets, Nearest Neighbours, or etc) and some data (such as voter turn out or hockey stats).
 
-Section Links : [Construction](#construction) , [Execution](#execution) , [Example](#example) , [FAQ](#faq) , [Related](#related-ai-projects) , and [References](#references)
+Section Links : [Construction](#construction) , [Execution](#execution) , [Configuration](#configuration) , [Example](#example) , [FAQ](#faq) , [Related](#related-ai-projects) , and [References](#references)
 
 # Construction
 
-### Boosting constructor
-Boosting is created like so:
+### require('boosting')
+The Boosting Constructor is created like so:
 ```js
 var BoostingConstructor = require('boosting')
-var boosting = BoostingConstructor( )
-```
-
-Here is the full configuration object and the constructor.
-```js
-var config = {
-	known 		: [],  // a list of known objects
-	classifiers : [],  // a list of classifier objects
-}
-var BoostingConstructor = require('boosting')
+var config = { /* config options */ }
 var boosting = BoostingConstructor( config )
 ```
-Quick links to more information about the [config](#configuration) , [known](#known-list) , and [classifiers](#classifier-list).
-
-You really don't need to use the config.  Instead you can use the add functions.  All configuration options are optional.
-
-### boosting.config()
-> Returns config
-
-Want to retrieve or inspect the configurate?  No problem, do it like so:
+Or as a one liner with default config:
 ```js
-var theConfig = boosting.config()
+var boosting = require('boosting')( )
 ```
+That's it.  Of course there are more [configuration](#configuration) options, but they are all optional.
 
-### boosting.addData( data , binaryValue)
-> Returns boosting
-
-Don't want to mess around with the *known* object list in the config?  No problem, add known data using the addData function.  The data is whatever your classifier functions take as an argument and the binaryValue *must be* either -1 or +1.
-```js
-boosting.addData( "cupcake" , -1 )
-```
 
 ### boosting.addClassifier( classifierFunction , handyName )
 > Returns boosting
 
-Don't want to mess around with the *classifiers* list in the config?  No problem, add your classifier functions using the addClassifier function.  Sound familar?  The classifierFunction takes the *data* you supplied in *.addData* and *must* return either -1 or +1.  Not 0.  Not 7.3.  -1 or +1.  The handy name is optional.  Use it like so:
+Add your classifier functions using the addClassifier function.  Your classifierFunction takes training and actual data you supply.  Your classifier returns a boolean.  You can also give it a handy name, but that is optional.  Use it like so:
 
 ```js
 var myClassifier = function(data) { 
-	/* do something and return -1 or +1 */
+	/* do something and return something truthy or falsy */
 }
 # add it
 boosting.addClassifier( myClassifier )
@@ -63,6 +41,22 @@ boosting.addClassifier( myClassifier )
 # or add it with a nice name, useful for debugging
 boosting.addClassifier( myClassifier , "win function")
 ```
+Why add a name?  No real reason other than debugging and self-documentation.
+
+
+### boosting.addData( data , boolean )
+> Returns boosting
+
+Add training data using the addData function.  The data is whatever your classifier functions take as an argument and the boolean value can be any javascript truthy or falsy value.
+```js
+boosting.addData( "cupcake" , false )
+```
+Because it returns the boosting object you can chain the calls like so:
+```js
+boosting.addData( "cupcake" , false ).addData( "bacon" , true )
+```
+You can do that with the addClassifier also, or mix it up and do one then the other.
+
 
 # Execution
 
@@ -79,10 +73,12 @@ Wow, that was easy.  Okay, maybe you want to enforce an alphaThreshold.  If you 
 ```js
 boosting.optimize( alphaThreshold )
 ```
-Why would you enforce an alphaThreshold?  Well, maybe you don't want useless classifiers to be included in the optimization.  Of course that means you'll have to find out what alphaThreshold means.  Or not.
+Why would you enforce an alphaThreshold?  Well, maybe you don't want useless classifiers to be included in the optimization.  Of course that means you'll have to find out what alphaThreshold means.  Or not and try *0.1*.
+
+Optimize moves some, none, or all of the classifiers out of its unused classifiers bin and into the *Good Classifier* bin.  If you run *.optimize* again, Boosting will check the unused classifiers (and any recently added classifiers) and see if they should be moved over to the other bin.
 
 ### boosting.classify( data )
-> Returns +1 or -1
+> Returns boolean
 
 Test some data.  This is where it all comes together.  You've configured your boosting function, added your data and classifiers, and optimized it.  Now you have some data that you want classified.  Do it like so:
 ```js
@@ -91,14 +87,37 @@ var result = boosting.classify( data )
 
 
 # Configuration
+
+### Config object
+Here is the full configuration object and the constructor.
+```js
+var config = {
+	known 		: [],  // a list of known objects
+	classifiers : [],  // a list of classifier objects
+}
+var BoostingConstructor = require('boosting')
+var boosting = BoostingConstructor( config )
+```
+Quick links to more information about the [known](#known-list) , and [classifiers](#classifier-list).
+
+You really don't need to use the config.  Instead you can use the add functions.  All configuration options are optional.
+
+### boosting.config()
+> Returns config
+
+Want to retrieve or inspect the configurate?  No problem, do it like so:
+```js
+var theConfig = boosting.config()
+```
+
 This is the specification of the configuration arrays you pass to boosting
 
 ### Known List
 ```js
 known = [
-	{ data : data1 , value : +1 },
-	{ data : data2 , value : -1 },
-	{ data : data3 , value : +1 },
+	{ data : data1 , value : true },
+	{ data : data2 , value : false },
+	{ data : data3 , value : true },
 	....
 ]
 ```
@@ -113,20 +132,19 @@ classifiers = [
 
 
 # Example
-```js
-var boosting = require('./boosting')()
-boosting.addClassifier( function(x) { return x < 5 ? +1 : -1 } , "less than 5")
-boosting.addClassifier( function(x) { return x % 2 ? +1 : -1 } , "odd")
-boosting.addData( 0 , +1 )
-boosting.addData( 2 , +1 )
 
-boosting.optimize(0)
-console.log( "classify(1) Should return '1' : " + boosting.classify( 1 ) )
-console.log( "classify(6) Should return '-1' : " + boosting.classify( 6 ) )
+If you have installed this as a npm dependency first change directory to *node_modules/boosting/*.
 
-var config = boosting.config()
-console.log( "Should use the classifier named 'less than 5' : " + (config.goodClassifiers[0].name == "less than 5") )
-console.log( "Should only use the classifier named 'less than 5' : " + (config.goodClassifiers.length == 1) )
+### Template
+This is a simple boilerplate ready for you to add your code.  Run it like so:
+```
+node example/template.js
+```
+
+### Minimal
+An absolute minimalist example of some classification.  Run it like so:
+```
+node example/minimalist.js
 ```
 
 # FAQ

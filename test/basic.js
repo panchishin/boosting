@@ -40,8 +40,8 @@ module.exports = {
 
 		assert.equal( "less than 5" , config.goodClassifiers[0].name )
 		assert.equal( 1 , config.goodClassifiers.length )
-		assert.equal( +1 , boosting.classify( 1 ) )
-		assert.equal( -1 , boosting.classify( 6 ) )
+		assert.equal( true , boosting.classify( 1 ) )
+		assert.equal( false , boosting.classify( 6 ) )
 	},
 
 	'has correct binary classifier' : function(beforeExit, assert) {
@@ -58,9 +58,29 @@ module.exports = {
 
 		assert.equal( "less than 5" , config.goodClassifiers[0].name )
 		assert.equal( 1 , config.goodClassifiers.length )
-		assert.equal( +1 , boosting.classify( 1 ) )
-		assert.equal( -1 , boosting.classify( 6 ) )
+		assert.equal( true , boosting.classify( 1 ) )
+		assert.equal( false , boosting.classify( 6 ) )
+	},
+
+	'has correct binary data' : function(beforeExit, assert) {
+
+		var boosting = boostingConstructor( )
+		boosting.addClassifier( function(x) { return x < 5  } , "less than 5")
+		boosting.addClassifier( function(x) { return x % 2  } , "odd")
+		boosting.addData( 0 , true )
+		boosting.addData( 2 , true )
+		boosting.addData( 10 , false )
+
+		boosting.optimize(0)
+		var config = boosting.config()
+
+		assert.equal( "less than 5" , config.goodClassifiers[0].name )
+		assert.equal( 1 , config.goodClassifiers.length )
+		assert.equal( true , boosting.classify( 1 ) )
+		assert.equal( false , boosting.classify( 6 ) )
 	}
+
+
 
 
 

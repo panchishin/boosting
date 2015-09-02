@@ -124,8 +124,7 @@ function boostingConstructor( newConfig ) {
 			return config
 		},
 		addData : function addData( data , binaryValue ) {
-			if ( binaryValue != 1 && binaryValue != -1 ) { throw new Error("binaryValue must be +1 or -1") }
-			config.known.push( { data : data , value : binaryValue } )
+			config.known.push( { data : data , value : toBinary( binaryValue ) } )
 			return this
 		},
 		addClassifier : function addClassifier( classifierFunction , name ) {
@@ -136,7 +135,7 @@ function boostingConstructor( newConfig ) {
 			return optimize(alphaThreshold,config)
 		},
 		classify : function classify( data ) {
-			return testClassifiers( config.goodClassifiers , [ { data : data } ] ).correct.length == 1 ? +1 : -1
+			return testClassifiers( config.goodClassifiers , [ { data : data } ] ).correct.length == 1
 		}
 	}
 }
