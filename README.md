@@ -6,9 +6,9 @@ What is a classifier?  A classifier is something (a function in this case) that 
 
 Much like [Genetic Algorithm](https://www.npmjs.com/package/geneticalgorithm), [Nearest Neighbour](https://www.npmjs.com/package/nearestneighbour), and [Neural Nets](https://www.npmjs.com/package/neuralnet), Boosting requires a training set.  
 
-To use Boosting you'll need some classifiers (that you write yourself or created from Neural Nets and Nearest Neighbours) and some data.
+To use Boosting you'll need some classifiers (that you write yourself or created from Neural Nets, Nearest Neighbours, or etc) and some data (such as voter turn out or hockey stats).
 
-Section Links : [Construction](#construction) , [Execution](#execution) , [Example](#example) , [Related](#related-ai-projects) , and [References](#references)
+Section Links : [Construction](#construction) , [Execution](#execution) , [Example](#example) , [FAQ](#faq) , [Related](#related-ai-projects) , and [References](#references)
 
 # Construction
 
@@ -121,23 +121,28 @@ boosting.addData( 0 , +1 )
 boosting.addData( 2 , +1 )
 
 boosting.optimize(0)
-var config = boosting.config()
-
-console.log( "Should use the classifier named 'less than 5' : " + (config.goodClassifiers[0].name == "less than 5") )
-console.log( "Should only use the classifier named 'less than 5' : " + (config.goodClassifiers.length == 1) )
 console.log( "classify(1) Should return '1' : " + boosting.classify( 1 ) )
 console.log( "classify(6) Should return '-1' : " + boosting.classify( 6 ) )
+
+var config = boosting.config()
+console.log( "Should use the classifier named 'less than 5' : " + (config.goodClassifiers[0].name == "less than 5") )
+console.log( "Should only use the classifier named 'less than 5' : " + (config.goodClassifiers.length == 1) )
 ```
 
+# FAQ
+
+*Can I use Boosting on Boosting?*  Yes you can!  Will it do anything extra?  Maybe.  If you have a few classifiers and a boosting of some other classifiers then you could use boosting again to combine the whole lot.  Enjoy.
+
+*What about over-fitting?*  Yes, over fitting is a problem with Neural Nets, Genetic Algorithms, and the like.  Boosting seems to not suffer from that problem.  Can you take a neural net that has been trained to overfit a problem and wrap it in Boosting to magically fix it?  No.  But if you had a few more neural nets and possibly a nearest neighbour and binomial classification all wrapped in boosting then, yes, over-fitting will be less of a problem.
 
 # Related AI Projects
 This is part of a set of related projects.
 
-* [AlphaBeta](https://www.npmjs.com/package/alphabeta)
-* [Boosting](https://www.npmjs.com/package/boosting)
-* [GeneticAlgorithm](https://www.npmjs.com/package/geneticalgorithm)
-* [NearestNeighbour](https://www.npmjs.com/package/nearestneighbour)
-* [NeuralNet](https://www.npmjs.com/package/neuralnet)
+* [AlphaBeta](https://www.npmjs.com/package/alphabeta) - decision making vs an opponent
+* [Boosting](https://www.npmjs.com/package/boosting) - grouping of classifiers
+* [GeneticAlgorithm](https://www.npmjs.com/package/geneticalgorithm) - mimic evolution
+* [NearestNeighbour](https://www.npmjs.com/package/nearestneighbour) - closest match to previous experience
+* [NeuralNet](https://www.npmjs.com/package/neuralnet) - mimic brain cells
 
 # References
 

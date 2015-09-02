@@ -1018,8 +1018,8 @@ body .markdown-body
 <p>The <em>Boosting</em> package is a general boosting algorithm which make a group of classifiers act as one improved classifier.</p>
 <p>What is a classifier?  A classifier is something (a function in this case) that determines if a thing is <em>one</em> kind of thing or <em>another</em> kind.  For example, suppose you have a few different functions that can scan images and detect if a persons face is in the image.  Either there is a face or there isn&rsquo;t.  Those functions are classifiers.  Independently they may not do all that well.  Boosting organizes and scales them so that together your functions do a better job than any one of them by themselves.  If there is a classifier that isn&rsquo;t important, redundant, or that is confusing the issue <em>Boosting</em> can detect that and exclude it.</p>
 <p>Much like <a href="https://www.npmjs.com/package/geneticalgorithm">Genetic Algorithm</a>, <a href="https://www.npmjs.com/package/nearestneighbour">Nearest Neighbour</a>, and <a href="https://www.npmjs.com/package/neuralnet">Neural Nets</a>, Boosting requires a training set.  </p>
-<p>To use Boosting you&rsquo;ll need some classifiers (that you write yourself or created from Neural Nets and Nearest Neighbours) and some data.</p>
-<p>Section Links : <a href="#construction">Construction</a> , <a href="#execution">Execution</a> , <a href="#example">Example</a> , <a href="#related-ai-projects">Related</a> , and <a href="#references">References</a></p>
+<p>To use Boosting you&rsquo;ll need some classifiers (that you write yourself or created from Neural Nets, Nearest Neighbours, or etc) and some data (such as voter turn out or hockey stats).</p>
+<p>Section Links : <a href="#construction">Construction</a> , <a href="#execution">Execution</a> , <a href="#example">Example</a> , <a href="#faq">FAQ</a> , <a href="#related-ai-projects">Related</a> , and <a href="#references">References</a></p>
 <h1 id="construction"><a name="user-content-construction" href="#construction" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Construction</h1>
 <h3 id="boosting-constructor"><a name="user-content-boosting-constructor" href="#boosting-constructor" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Boosting constructor</h3>
 <p>Boosting is created like so:<br />
@@ -1112,22 +1112,25 @@ boosting.addData( 0 , +1 )
 boosting.addData( 2 , +1 )
 
 boosting.optimize(0)
-var config = boosting.config()
-
-console.log( &quot;Should use the classifier named 'less than 5' : &quot; + (config.goodClassifiers[0].name == &quot;less than 5&quot;) )
-console.log( &quot;Should only use the classifier named 'less than 5' : &quot; + (config.goodClassifiers.length == 1) )
 console.log( &quot;classify(1) Should return '1' : &quot; + boosting.classify( 1 ) )
 console.log( &quot;classify(6) Should return '-1' : &quot; + boosting.classify( 6 ) )
+
+var config = boosting.config()
+console.log( &quot;Should use the classifier named 'less than 5' : &quot; + (config.goodClassifiers[0].name == &quot;less than 5&quot;) )
+console.log( &quot;Should only use the classifier named 'less than 5' : &quot; + (config.goodClassifiers.length == 1) )
 </code></pre>
 
+<h1 id="faq"><a name="user-content-faq" href="#faq" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>FAQ</h1>
+<p><em>Can I use Boosting on Boosting?</em>  Yes you can!  Will it do anything extra?  Maybe.  If you have a few classifiers and a boosting of some other classifiers then you could use boosting again to combine the whole lot.  Enjoy.</p>
+<p><em>What about over-fitting?</em>  Yes, over fitting is a problem with Neural Nets, Genetic Algorithms, and the like.  Boosting seems to not suffer from that problem.  Can you take a neural net that has been trained to overfit a problem and wrap it in Boosting to magically fix it?  No.  But if you had a few more neural nets and possibly a nearest neighbour and binomial classification all wrapped in boosting then, yes, over-fitting will be less of a problem.</p>
 <h1 id="related-ai-projects"><a name="user-content-related-ai-projects" href="#related-ai-projects" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Related AI Projects</h1>
 <p>This is part of a set of related projects.</p>
 <ul>
-<li><a href="https://www.npmjs.com/package/alphabeta">AlphaBeta</a></li>
-<li><a href="https://www.npmjs.com/package/boosting">Boosting</a></li>
-<li><a href="https://www.npmjs.com/package/geneticalgorithm">GeneticAlgorithm</a></li>
-<li><a href="https://www.npmjs.com/package/nearestneighbour">NearestNeighbour</a></li>
-<li><a href="https://www.npmjs.com/package/neuralnet">NeuralNet</a></li>
+<li><a href="https://www.npmjs.com/package/alphabeta">AlphaBeta</a> - decision making vs an opponent</li>
+<li><a href="https://www.npmjs.com/package/boosting">Boosting</a> - grouping of classifiers</li>
+<li><a href="https://www.npmjs.com/package/geneticalgorithm">GeneticAlgorithm</a> - mimic evolution</li>
+<li><a href="https://www.npmjs.com/package/nearestneighbour">NearestNeighbour</a> - closest match to previous experience</li>
+<li><a href="https://www.npmjs.com/package/neuralnet">NeuralNet</a> - mimic brain cells</li>
 </ul>
 <h1 id="references"><a name="user-content-references" href="#references" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>References</h1>
 <ul>
