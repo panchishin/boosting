@@ -1,4 +1,4 @@
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Auto Test Status][travis-image]][travis-url] [![license][license-image]][license-url] [![Gitter chat][gitter-image]][gitter-url]
+[![Issues][issues-image]][issues-url] [![Downloads][downloads-image]][downloads-url] [![Auto Test Status][travis-image]][travis-url] [![license][license-image]][license-url] [![Gitter chat][gitter-image]][gitter-url]
 
 The *Boosting* package is a general boosting algorithm which make a group of classifiers act as one improved classifier.
 
@@ -167,12 +167,14 @@ This is part of a set of related projects.
 * [Instructor: Patrick Winston from MIT](https://www.youtube.com/watch?v=UHBmv7qCey4)
 
 
-[npm-url]: https://npmjs.org/package/boosting
-[npm-image]: http://img.shields.io/npm/v/boosting.svg
+[issues-url]: https://github.com/panchishin/boosting/issues
+[issues-image]: https://img.shields.io/github/issues/panchishin/boosting.svg
 
 [gitter-url]: https://gitter.im/panchishin/boosting
 [gitter-image]: https://badges.gitter.im/panchishin/boosting.png
+
 [downloads-image]: http://img.shields.io/npm/dm/boosting.svg
+[downloads-url]: https://www.npmjs.com/~panchishin
 
 [travis-url]: https://travis-ci.org/panchishin/boosting
 [travis-image]: http://img.shields.io/travis/panchishin/boosting.svg
